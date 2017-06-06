@@ -21,7 +21,7 @@ namespace MediaLiveDemo
               );
             RouteTable.Routes.MapHttpRoute(
                 "DefaultDownload",
-                "api/{controller}/download"
+                "api/{controller}/{action}"
             );
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
