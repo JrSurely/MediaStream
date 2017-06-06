@@ -14,7 +14,7 @@ namespace MediaLiveDemo
 
         public VideoStream(string filename, string ext)
         {
-            _filename = @"F:\迅雷下载\" + filename + "." + ext;
+            _filename = @"D:\Youku Files\transcode\" + filename + "." + ext;
         }
         public async void WriteToStream(Stream outputStream, HttpContent content, TransportContext context)
         {

@@ -19,6 +19,10 @@ namespace MediaLiveDemo
                  "DefaultVideo",
                   "api/{controller}/{ext}/{filename}"
               );
+            RouteTable.Routes.MapHttpRoute(
+                "DefaultDownload",
+                "api/{controller}/download"
+            );
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);

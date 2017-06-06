@@ -15,14 +15,10 @@ namespace MediaLiveDemo
             config.MapHttpAttributeRoutes();
 
             //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
+            //    name: "Default",
+            //    routeTemplate: "api/{controller}/download"
+            //// defaults: new { controller = "Values", action = "Index", id = RouteParameter.Optional }
             //);
-            config.Routes.MapHttpRoute(
-                "DefaultVideo",
-                "api/{controller}/{ext}/{filename}"
-           );
         }
     }
 }

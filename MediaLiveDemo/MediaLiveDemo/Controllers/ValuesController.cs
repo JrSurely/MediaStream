@@ -12,7 +12,7 @@ namespace MediaLiveDemo.Controllers
     [Route("api/{controller}")]
     public class ValuesController : ApiController
     {
-        [HttpGet,Route("{ext}/{filename}")]
+        [HttpGet, Route("{ext}/{filename}")]
         public HttpResponseMessage Get(string filename, string ext)
         {
             var video = new VideoStream(filename, ext);
@@ -22,31 +22,28 @@ namespace MediaLiveDemo.Controllers
             //调用异步数据推送接口  
             return response;
         }
-        // GET api/values
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/values/5
-        public string Get(int id)
+        [HttpGet,Route("download")]
+        public HttpResponseMessage GetFileFromWebApi()
         {
-            return "value";
-        }
-
-        // POST api/values
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
-        {
-        }
+            try
+            {
+                //var filePath = System.Web.Hosting.HostingEnvironment.MapPath(@"~/download/EditPlus64_xp85.com.zip");
+                var filePath = @"D:\Youku Files\transcode\人民的名义 01_高清.MP4";
+                var stream = new FileStream(filePath, FileMode.Open);
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Content = new StreamContent(stream);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "Wep Api Demo File.zip"
+                };
+                return response;
+            }
+            catch
+            {
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
+            }
+        }     
     }
 }
