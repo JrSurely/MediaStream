@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "MediaIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fileName = ViewBag.fileName;
+}
+
+<h2>MediaIndex</h2>
+@*<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title></title>*@
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/flowplayer/flowplayer-3.2.11.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: "Get",
+            async: false,
+            url: "/Home/GetFileList",
+            data: {},
+            success: function (rst) {
+                debugger;
+                if (rst != null) {
+                    for (var i = 0; i < rst.length; i++) {
+                        $("#mediaList").append(" <li value='" + rst[i].toString() + "'>" + rst[i].toString() + "</li>");
+
+                    }
+                }
+            }
+        });
+
+    });
+</script>
+@*</head>
+    <body>*@
+<!--第一种方法-->
+<!-- <a href="/Video/story.flv" style="display: block; width: 670px; height: 450px" id="tl_player">
+  </a>
+  <script>
+      flowplayer("tl_player", "/js/flowplayer/flowplayer-3.2.12.swf");
+  </script>-->
+<div>
+    <ul id="mediaList"><li></li></ul>
+</div>
+<br />
+<!--第二种方法-->
+<div id="tl_player" style="width: 670px; height: 450px;">
+</div>
+<script>
+    flowplayer("tl_player", "../Scripts/flowplayer/flowplayer-3.2.12.swf", { clip: { url: "/Upload/@fileName", autoPlay: false, autoBuffering: true } });
+
+</script>
+@*</body>
+    </html>*@
+

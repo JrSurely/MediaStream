@@ -178,6 +178,9 @@
     </Content>
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\flowplayer\flowplayer-3.2.11.min.js" />
+    <Content Include="Scripts\flowplayer\flowplayer-3.2.12.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-3.2.12.swf" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -223,6 +226,7 @@
     <Content Include="Views\Home\Index1.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\PhotoIndex.cshtml" />
+    <Content Include="Views\Home\MediaIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -251,7 +255,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15441</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

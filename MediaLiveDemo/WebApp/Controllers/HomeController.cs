@@ -13,6 +13,7 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         static string urlPath = string.Empty;
+        string name = string.Empty;
 
         public HomeController()
         {
@@ -61,7 +62,8 @@ namespace WebApp.Controllers
             fs.Flush();
             fs.Close();
             System.IO.Directory.Delete(dir);//删除文件夹
-            return Json(new { error = 0 });//随便返回个值，实际中根据需要返回
+                                            //  return RedirectToAction("MediaIndex", fileName);
+            return Json(1);//随便返回个值，实际中根据需要返回
         }
         #endregion
 
@@ -122,6 +124,35 @@ namespace WebApp.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult MediaIndex(string fileName = "")
+        {
+            GetFileList();
+            ViewBag.fileName = name;
+            return View();
+        }
+
+        public ActionResult GetFileList()
+        {
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"/Upload";
+            DirectoryInfo dir = new DirectoryInfo(path);
+            //path为某个目录，如： “D:\Program Files”
+            FileInfo[] inf = dir.GetFiles();
+            List<string> fileList = new List<string>();
+            foreach (FileInfo finf in inf)
+            {
+                if (finf.Extension.Equals(".mp4"))
+                {
+                    //如果扩展名为“.mp4”
+                    name = finf.Name;
+                    fileList.Add(finf.Name);
+                    //读取文件的完整目录和文件名
+                }
+
+            }
+            return Json(fileList);
+
         }
     }
 }
