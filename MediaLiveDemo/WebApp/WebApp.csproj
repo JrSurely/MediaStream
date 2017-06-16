@@ -152,6 +152,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\FileModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UploadProcessor.cs" />
     <Compile Include="Util.cs" />
@@ -171,6 +172,7 @@
     <Content Include="Images\cp_img_sc.png" />
     <Content Include="Images\cp_img_tj.png" />
     <Content Include="Images\cp_img_tj_a.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -179,8 +181,16 @@
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\flowplayer\flowplayer-3.2.11.min.js" />
-    <Content Include="Scripts\flowplayer\flowplayer-3.2.12.swf" />
-    <Content Include="Scripts\flowplayer\flowplayer.controls-3.2.12.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.commercial-3.2.6-dev.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.commercial.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-3.2.4-dev.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-air-3.2.4-dev.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-air.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-skinless-3.2.4-dev.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-skinless.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-tube-3.2.4-dev.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls-tube.swf" />
+    <Content Include="Scripts\flowplayer\flowplayer.controls.swf" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -231,7 +241,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="CSS\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

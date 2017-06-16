@@ -100,11 +100,11 @@
 
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
         uploader.on('uploadSuccess', function (file, response) {
-            debugger;
+            window.location.href = "/Home/MediaIndex?fileName=" + escape(file.name);
             $('#' + file.id).find('p.state').text('已上传');
             $.post('Home/Merge', { guid: GUID, fileName: file.name }, function (data) {
                 $("#uploader .state").html("上传成功...");
-                window.location.href = "/Home/MediaIndex?fileName=" + file.name;
+              
             });
         });
 

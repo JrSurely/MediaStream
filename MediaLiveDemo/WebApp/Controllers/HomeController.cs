@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
@@ -128,31 +129,63 @@ namespace WebApp.Controllers
 
         public ActionResult MediaIndex(string fileName = "")
         {
-            GetFileList();
-            ViewBag.fileName = name;
+            //GetFileList();
+            //ViewBag.fileName = name;
             return View();
         }
 
         public ActionResult GetFileList()
         {
+            List<FileModel> fileList = new List<FileModel>();
             string path = AppDomain.CurrentDomain.BaseDirectory + @"/Upload";
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path);
+                return Json(fileList, JsonRequestBehavior.AllowGet);
+            }
             DirectoryInfo dir = new DirectoryInfo(path);
             //path为某个目录，如： “D:\Program Files”
             FileInfo[] inf = dir.GetFiles();
-            List<string> fileList = new List<string>();
+          
             foreach (FileInfo finf in inf)
             {
-                if (finf.Extension.Equals(".mp4"))
+                if (finf.Extension.Equals(".mp4")|| finf.Extension.Equals(".flv"))
                 {
                     //如果扩展名为“.mp4”
                     name = finf.Name;
-                    fileList.Add(finf.Name);
+                    fileList.Add(new FileModel() {FileName=finf.Name,Size= GetFileSize(finf.FullName) });
                     //读取文件的完整目录和文件名
                 }
 
             }
-            return Json(fileList);
+            return Json(fileList, JsonRequestBehavior.AllowGet);
 
+        }
+
+        private string GetFileSize(string sFileFullName)
+        {
+            FileInfo fiInput = new FileInfo(sFileFullName);
+            double len = fiInput.Length;
+
+            string[] sizes = { "B", "KB", "MB", "GB" };
+            int order = 0;
+            while (len >= 1024 && order + 1 < sizes.Length)
+            {
+                order++;
+                len = len / 1024;
+            }
+
+            string filesize = String.Format("{0:0.##} {1}", len, sizes[order]);
+            return filesize;
+        }
+
+        public static bool FileIsLargerThan1KB(string sFileFullName)
+        {
+            FileInfo fiInput = new FileInfo(sFileFullName);
+            double len = fiInput.Length;
+
+            len = len / 1024 / 1024;
+            return len > 1;
         }
     }
 }

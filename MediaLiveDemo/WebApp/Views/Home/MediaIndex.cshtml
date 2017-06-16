@@ -2,16 +2,50 @@
 @{
     ViewBag.Title = "MediaIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    string fileName = ViewBag.fileName;
+    //string fileName = ViewBag.fileName;
 }
 
-<h2>MediaIndex</h2>
+<h2>点击播放</h2>
 @*<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title></title>*@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/flowplayer/flowplayer-3.2.11.min.js"></script>
+<style type="text/css">
+    
+    #mediaList li:hover {
+        color: #0000ff;
+        cursor: pointer;
+        cursor: pointer;
+    }
+</style>
 <script type="text/javascript">
+    //function click(e) {
+    //    if (document.all) {
+    //        if (event.button == 2 || event.button == 3) {
+    //            document.oncontextmenu = 'return false';
+    //        }
+    //    }
+    //    if (document.layers) {
+    //        if (e.which == 3) {
+    //            document.oncontextmenu = 'return false';
+    //        }
+    //    }
+    //}
+    //if (document.layers) {
+    //    document.captureEvents(Event.MOUSEDOWN);
+    //}
+    //document.onmousedown = click;
+    //document.oncontextmenu = new Function("return false;");
+
+    //document.onkeydown = document.onkeyup = document.onkeypress = function () {
+    //    debugger 
+    //    if (window.event.keyCode == 123) {
+    //        window.event.returnValue = false;
+    //        return (false);
+    //    }
+    //}
+    var rtmp_name;
     $(function () {
         $.ajax({
             type: "Get",
@@ -19,10 +53,10 @@
             url: "/Home/GetFileList",
             data: {},
             success: function (rst) {
-                debugger;
                 if (rst != null) {
+                    rtmp_name = "/Upload/" + rst[0].FileName;
                     for (var i = 0; i < rst.length; i++) {
-                        $("#mediaList").append(" <li value='" + rst[i].toString() + "'>" + rst[i].toString() + "</li>");
+                        $("#mediaList").append(" <li onclick='play(this)' id='" + rst[i].FileName + "' value='" + rst[i].FileName + "'>" + rst[i].FileName.toString() + "  " + rst[i].Size + "</li>");
 
                     }
                 }
@@ -30,6 +64,35 @@
         });
 
     });
+    function play(obj) {
+        var $this = $(obj);
+        var id = $this.attr("id");
+        flowplayer("tl_player", "../Scripts/flowplayer/flowplayer.commercial.swf",
+            {
+                clip: { url: "/Upload/" + id, autoPlay: true, autoBuffering: true },
+                key: '#$7162d2d730cf607ac6d',
+                logo: {
+                    url: '/Images/logo.png',
+                    fullscreenOnly: false,
+                    opacity: 0
+                },
+                plugins: {
+
+                    // tie logo autohiding to the controlbar  
+                    controls: {
+                        onBeforeShowed: function () {
+                            // gradually show on mouseover  
+                            this.getPlayer().getLogo().fadeTo(0.7, 800);
+                        },
+
+                        onBeforeHidden: function () {
+                            // gradually hide on mouseout  
+                            this.getPlayer().getLogo().fadeTo(0, 800);
+                        }
+                    }
+                }
+            });
+    }
 </script>
 @*</head>
     <body>*@
@@ -40,15 +103,76 @@
       flowplayer("tl_player", "/js/flowplayer/flowplayer-3.2.12.swf");
   </script>-->
 <div>
-    <ul id="mediaList"><li></li></ul>
+    <ul id="mediaList"></ul>
 </div>
 <br />
 <!--第二种方法-->
 <div id="tl_player" style="width: 670px; height: 450px;">
 </div>
-<script>
-    flowplayer("tl_player", "../Scripts/flowplayer/flowplayer-3.2.12.swf", { clip: { url: "/Upload/@fileName", autoPlay: false, autoBuffering: true } });
 
+<div id="player" style="width: 670px; height: 450px;">
+</div>
+<script>
+    //  flowplayer("tl_player", "../Scripts/flowplayer/flowplayer-3.2.12.swf", { clip: { url: "/Upload/fileName", autoPlay: false, autoBuffering: true } });
+
+
+    //flowplayer("player",
+    //    "../Scripts/flowplayer/flowplayer-3.2.12.swf",
+    //    { //播放器主文件（根据项目定亦可引用：http://releases.flowplayer.org/swf/flowplayer-3.2.12.swf）
+    //        clip: {
+    //            url: rtmp_name, //流的名称
+    //            autoPlay: true, //自动播放
+    //            autoBuffering: true//是否开启缓冲
+    //        },
+
+    //        //playlist: [//播放列表
+    //        //    {
+    //        //        url: "notfound.jpg",//默认显示图片（如果没有这显示播放视频的第一个画面）
+    //        //        //duration: 5,//持续时间
+    //        //        scaling: 'orig'//缩放
+    //        //    },
+    //        //    {
+    //        //        url: 'flowplayer-700.flv',//需要播放的文件
+    //        //        autoPlay: false,
+    //        //        provider: 'http',
+    //        //        autoBuffering: true
+    //        //    }
+    //        //],
+    //        plugins: {
+    //            controls: {
+    //                bottom: 0, //功能条距底部的距离
+    //                height: 24, //功能条高度
+    //                zIndex: 1,
+    //                fontColor: '#ffffff',
+    //                timeFontColor: '#333333',
+    //                playlist: true, //上一个、下一个按钮
+    //                play: true, //开始按钮
+    //                volume: true, //音量按钮
+    //                mute: true, //静音按钮
+    //                stop: true, //停止按钮
+    //                fullscreen: true, //全屏按钮
+    //                scrubber: true, //进度条
+    //                url:
+    //                    "flowplayer.controls-3.2.12.swf", //决定功能条的显示样式（功能条swf文件,根据项目定亦可引用:http://releases.flowplayer.org/swf/flowplayer.controls-3.2.12.swf）
+    //                time: true, //是否显示时间信息
+    //                autoHide: true, //功能条是否自动隐藏
+    //                backgroundColor: '#aedaff', //背景颜色
+    //                backgroundGradient: [0.1, 0.1, 1.0], //背景颜色渐变度（等分的点渐变）
+    //                opacity: 0.5, //功能条的透明度
+    //                borderRadius: '30', //功能条边角
+    //                tooltips: {
+    //                    buttons: true, //是否显示
+    //                    fullscreen: '全屏', //全屏按钮，鼠标指上时显示的文本
+    //                    stop: '停止',
+    //                    play: '开始',
+    //                    volume: '音量',
+    //                    mute: '静音',
+    //                    next: '下一个',
+    //                    previous: '上一个'
+    //                }
+    //            }
+    //        }
+    //    });
 </script>
 @*</body>
     </html>*@
