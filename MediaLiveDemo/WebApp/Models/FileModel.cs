@@ -9,5 +9,7 @@ namespace WebApp.Models
     {
         public string FileName { get; set; }
         public string Size { get; set; }
+
+        public string TotalSeconds { get; set; }
     }
 }

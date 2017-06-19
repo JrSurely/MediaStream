@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Shell32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.Models;
@@ -14,8 +12,6 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         static string urlPath = string.Empty;
-        string name = string.Empty;
-
         public HomeController()
         {
             var applicationPath = VirtualPathUtility.ToAbsolute("~") == "/" ? "" : VirtualPathUtility.ToAbsolute("~");
@@ -146,14 +142,14 @@ namespace WebApp.Controllers
             DirectoryInfo dir = new DirectoryInfo(path);
             //path为某个目录，如： “D:\Program Files”
             FileInfo[] inf = dir.GetFiles();
-          
+            int a = 0;
             foreach (FileInfo finf in inf)
             {
                 if (finf.Extension.Equals(".mp4")|| finf.Extension.Equals(".flv"))
                 {
                     //如果扩展名为“.mp4”
-                    name = finf.Name;
-                    fileList.Add(new FileModel() {FileName=finf.Name,Size= GetFileSize(finf.FullName) });
+                   // a = GetVideoLength.GetMediaTimeLenSecond(finf.FullName);
+                    fileList.Add(new FileModel() {FileName=finf.Name,Size= GetFileSize(finf.FullName),TotalSeconds= GetVideoLength.GetMediaTimeLen(finf.FullName) });
                     //读取文件的完整目录和文件名
                 }
 
@@ -186,6 +182,23 @@ namespace WebApp.Controllers
 
             len = len / 1024 / 1024;
             return len > 1;
+        }
+
+        public static class GetVideoLength
+        {
+            public static string GetMediaTimeLen(string path)
+            {
+                ShellClass sh = new ShellClass();
+
+                Folder dir = sh.NameSpace(Path.GetDirectoryName(path));
+
+                FolderItem item = dir.ParseName(Path.GetFileName(path));
+
+                string str = dir.GetDetailsOf(item, 27); // 获取歌曲时长。  
+
+                return str;
+                 
+            }
         }
     }
 }

@@ -5,18 +5,21 @@
     //string fileName = ViewBag.fileName;
 }
 
-<h2>点击播放</h2>
+<h2>播放列表</h2>
 @*<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title></title>*@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/flowplayer/flowplayer-3.2.11.min.js"></script>
 <style type="text/css">
-    
     #mediaList li:hover {
         color: #0000ff;
         cursor: pointer;
         cursor: pointer;
+    }
+
+    .clkcolor {
+        color: red;
     }
 </style>
 <script type="text/javascript">
@@ -39,7 +42,7 @@
     //document.oncontextmenu = new Function("return false;");
 
     //document.onkeydown = document.onkeyup = document.onkeypress = function () {
-    //    debugger 
+    //    debugger
     //    if (window.event.keyCode == 123) {
     //        window.event.returnValue = false;
     //        return (false);
@@ -56,7 +59,7 @@
                 if (rst != null) {
                     rtmp_name = "/Upload/" + rst[0].FileName;
                     for (var i = 0; i < rst.length; i++) {
-                        $("#mediaList").append(" <li onclick='play(this)' id='" + rst[i].FileName + "' value='" + rst[i].FileName + "'>" + rst[i].FileName.toString() + "  " + rst[i].Size + "</li>");
+                        $("#mediaList").append(" <li onclick='play(this)' id='" + rst[i].FileName + "' value='" + rst[i].FileName + "'>" + (i + 1) + ".[" + rst[i].FileName.toString() + "]&nbsp;&nbsp;" + rst[i].Size + "&nbsp;&nbsp;时长:" + rst[i].TotalSeconds + "</li>");
 
                     }
                 }
@@ -67,6 +70,8 @@
     function play(obj) {
         var $this = $(obj);
         var id = $this.attr("id");
+        $("ul[id=mediaList] > li").removeClass("clkcolor");
+        $this.addClass("clkcolor");
         flowplayer("tl_player", "../Scripts/flowplayer/flowplayer.commercial.swf",
             {
                 clip: { url: "/Upload/" + id, autoPlay: true, autoBuffering: true },
@@ -78,15 +83,15 @@
                 },
                 plugins: {
 
-                    // tie logo autohiding to the controlbar  
+                    // tie logo autohiding to the controlbar
                     controls: {
                         onBeforeShowed: function () {
-                            // gradually show on mouseover  
+                            // gradually show on mouseover
                             this.getPlayer().getLogo().fadeTo(0.7, 800);
                         },
 
                         onBeforeHidden: function () {
-                            // gradually hide on mouseout  
+                            // gradually hide on mouseout
                             this.getPlayer().getLogo().fadeTo(0, 800);
                         }
                     }

@@ -66,6 +66,7 @@
 
             chunked: true,//开始分片上传
             chunkSize: 2048000,//每一片的大小
+            threads: 3,//上传并发数。
             formData: {
                 guid: GUID //自定义参数，待会儿解释
             },
@@ -100,7 +101,6 @@
 
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
         uploader.on('uploadSuccess', function (file, response) {
-            window.location.href = "/Home/MediaIndex?fileName=" + escape(file.name);
             $('#' + file.id).find('p.state').text('已上传');
             $.post('Home/Merge', { guid: GUID, fileName: file.name }, function (data) {
                 $("#uploader .state").html("上传成功...");
@@ -116,10 +116,12 @@
         // 完成上传完了，成功或者失败，先删除进度条。
         uploader.on('uploadComplete', function (file) {
             $('#' + file.id).find('.progress').fadeOut();
+           // window.location.href = "/Home/MediaIndex?fileName=" + escape(file.name);
         });
 
         //所有文件上传完毕
         uploader.on("uploadFinished", function () {
+            window.location.href = "/Home/MediaIndex";
             //提交表单
 
         });
