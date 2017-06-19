@@ -35,7 +35,7 @@ namespace MediaLiveDemo
                     }
                 }
             }
-            catch (HttpException ex)
+            catch (HttpException)
             {
                 return;
             }

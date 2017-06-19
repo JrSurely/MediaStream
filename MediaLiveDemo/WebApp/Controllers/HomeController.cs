@@ -1,4 +1,6 @@
-﻿using Shell32;
+﻿using Media.BLL;
+using Media.Model;
+using Shell32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +13,7 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private MovieBLL movieBll = new MovieBLL();
         static string urlPath = string.Empty;
         public HomeController()
         {
@@ -60,6 +63,21 @@ namespace WebApp.Controllers
             fs.Close();
             System.IO.Directory.Delete(dir);//删除文件夹
                                             //  return RedirectToAction("MediaIndex", fileName);
+            Movies info = new Movies();
+            info.CategoriesID = 1;
+            info.MovieName = fileRelName;
+            info.MovieDirector = "Bruce";
+            info.MovieActor = "阿米尔汗";
+            info.MovieDesc = "test";
+            info.MovieData = DateTime.Now;
+            info.MovieTime = 120;
+            info.MovieHit = 100;
+            info.AddDate = DateTime.Now.ToString("yyyy年MM月dd日");
+            info.MovieCountry = "日本";
+            info.MovieLanguage = "日语";
+            info.MovieImage = "";
+            info.MoviePath = @"/Upload/"+fileName;
+            movieBll.AddMovies(info);
             return Json(1);//随便返回个值，实际中根据需要返回
         }
         #endregion
@@ -142,20 +160,25 @@ namespace WebApp.Controllers
             DirectoryInfo dir = new DirectoryInfo(path);
             //path为某个目录，如： “D:\Program Files”
             FileInfo[] inf = dir.GetFiles();
-            int a = 0;
             foreach (FileInfo finf in inf)
             {
                 if (finf.Extension.Equals(".mp4")|| finf.Extension.Equals(".flv"))
                 {
                     //如果扩展名为“.mp4”
-                   // a = GetVideoLength.GetMediaTimeLenSecond(finf.FullName);
                     fileList.Add(new FileModel() {FileName=finf.Name,Size= GetFileSize(finf.FullName),TotalSeconds= GetVideoLength.GetMediaTimeLen(finf.FullName) });
                     //读取文件的完整目录和文件名
                 }
 
             }
+            //GetMoviesList();
             return Json(fileList, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public ActionResult GetMoviesList()
+        {
+            var movieList = movieBll.GetMoviesList();
+            return Json(movieList,JsonRequestBehavior.AllowGet);
         }
 
         private string GetFileSize(string sFileFullName)

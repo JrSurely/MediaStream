@@ -255,6 +255,20 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Media.BLL\Media.BLL.csproj">
+      <Project>{29c74ce7-ba06-480d-a023-095fe6fcda85}</Project>
+      <Name>Media.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Media.Infrastructure\Media.Infrastructure.csproj">
+      <Project>{b0908be2-25ab-4cdf-84b1-1b34eb12e6e6}</Project>
+      <Name>Media.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Media.Model\Media.Model.csproj">
+      <Project>{a93195d7-8476-4274-8d84-dc834cda3884}</Project>
+      <Name>Media.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
