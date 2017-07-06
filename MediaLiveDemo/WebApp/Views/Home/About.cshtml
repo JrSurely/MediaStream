@@ -1,7 +1,69 @@
 ﻿@{
     ViewBag.Title = "About";
+    List<WebApp.Controllers.User> list = ViewBag.Users as List<WebApp.Controllers.User>;
 }
 <h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h3>@ViewBag.Message</h3> 
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(function() {
+      
+      
+    })
+    function user() {
+        this.ip = '';
+        this.userName = '';
+        this.type ='';
+    }
+    function getList() {
+        var list = new Array();
+        var data = $("#userList").find(".txt");
+        $(data).each(function () {
+            var info = new user();
+            info.userName = $(this).attr("usename");
+            
+            info.ip = $(this).attr("title");
 
-<p>Use this area to provide additional information.</p>
+            info.type = $(this).attr("camtype");
+            console.log($(this).attr("usename"));
+            console.log($(this).attr("title"));
+            console.log($(this).attr("camtype"));
+            list.push(info);
+        });
+        debugger;
+        return list;
+    }
+    function Delete(obj) {
+        $(obj).parent().remove();
+    }
+    function SaveAs() {
+        debugger;
+        var list = getList();
+        console.log(list);
+        $.ajax({
+            type: "POST",
+            url: "/Home/SaveTxt",
+            data: { strInfo: JSON.stringify(list) },
+            success: function (rst) {
+                alert(rst);
+            }
+        });
+    }
+
+   
+</script>
+
+<div>
+    <input type="button" value="另存为.." onclick="SaveAs()" />
+    <ul id="userList">
+        @if (list.Any())
+        {
+            foreach (var item in list)
+            {
+                <li><input type="button" value="删除" onclick="Delete(this)" /><a class="txt" href="http://@item.Ip?@item.UserName" title="@item.Ip" usename="@item.UserName" camtype="@item.Type" target="_blank">@item.Ip【@item.UserName】</a></li>
+            }
+        }
+    </ul>
+</div>
+
+

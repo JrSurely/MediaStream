@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "MediaIndex";
+    ViewBag.Title = "视频列表";
     Layout = "~/Views/Shared/_Layout.cshtml";
     //string fileName = ViewBag.fileName;
 }
@@ -17,6 +17,9 @@
         color: #0000ff;
         cursor: pointer;
         cursor: pointer;
+    }
+    .active {
+        color: red;  
     }
 </style>
 <script type="text/javascript">
@@ -55,6 +58,7 @@
             success: function (rst) {
                 if (rst != null) {
                     rtmp_name = "/Upload/" + rst[0].FileName;
+                    $("ul li").eq(0).addClass('active');
                     for (var i = 0; i < rst.length; i++) {
                         $("#mediaList").append(" <li onclick='play(this)' id='" + rst[i].FileName + "' value='" + rst[i].FileName + "'>" + rst[i].FileName.toString() + "  " + rst[i].Size + "</li>");
 
@@ -62,11 +66,37 @@
                 }
             }
         });
+        flowplayer("tl_player", "../Scripts/flowplayer/flowplayer.commercial.swf",
+            {
+                clip: { url: rtmp_name, autoPlay: true, autoBuffering: true },
+                key: '#$7162d2d730cf607ac6d',
+                logo: {
+                    url: '/Images/logo.png',
+                    fullscreenOnly: false,
+                    opacity: 0
+                },
+                plugins: {
+
+                    // tie logo autohiding to the controlbar  
+                    controls: {
+                        onBeforeShowed: function () {
+                            // gradually show on mouseover  
+                            this.getPlayer().getLogo().fadeTo(0.7, 800);
+                        },
+
+                        onBeforeHidden: function () {
+                            // gradually hide on mouseout  
+                            this.getPlayer().getLogo().fadeTo(0, 800);
+                        }
+                    }
+                }
+            });
 
     });
     function play(obj) {
         var $this = $(obj);
         var id = $this.attr("id");
+        $(obj).addClass('active').siblings().removeClass('active');
         flowplayer("tl_player", "../Scripts/flowplayer/flowplayer.commercial.swf",
             {
                 clip: { url: "/Upload/" + id, autoPlay: true, autoBuffering: true },
@@ -111,8 +141,24 @@
 </div>
 
 <div id="player" style="width: 670px; height: 450px;">
-</div>
+</div>    
+<input type="button" value="合并文件"id="MergeBtn" onclick="MergeClick()" />
 <script>
+    $(function() {
+       
+    })
+    function MergeClick() {
+        
+        $.ajax({
+            type: "POST",
+            url: "/Home/MergeTest",
+            data: {},
+            success: function (rst) {
+                alert(rst);
+            }
+
+        });
+    }
     //  flowplayer("tl_player", "../Scripts/flowplayer/flowplayer-3.2.12.swf", { clip: { url: "/Upload/fileName", autoPlay: false, autoBuffering: true } });
 
 

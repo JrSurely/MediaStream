@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.Models;
@@ -115,7 +117,9 @@ namespace WebApp.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
+            string path = @"C:\Users\zhoufugui\Desktop\test.txt";
+            List<User> list = GetUserList(path);
+            ViewBag.Users = list;
             return View();
         }
 
@@ -146,14 +150,14 @@ namespace WebApp.Controllers
             DirectoryInfo dir = new DirectoryInfo(path);
             //path为某个目录，如： “D:\Program Files”
             FileInfo[] inf = dir.GetFiles();
-          
+
             foreach (FileInfo finf in inf)
             {
-                if (finf.Extension.Equals(".mp4")|| finf.Extension.Equals(".flv"))
+                if (finf.Extension.Equals(".mp4") || finf.Extension.Equals(".flv"))
                 {
                     //如果扩展名为“.mp4”
-                    name = finf.Name;
-                    fileList.Add(new FileModel() {FileName=finf.Name,Size= GetFileSize(finf.FullName) });
+                    //name = finf.Name;
+                    fileList.Add(new FileModel() { FileName = finf.Name, Size = GetFileSize(finf.FullName) });
                     //读取文件的完整目录和文件名
                 }
 
@@ -187,5 +191,56 @@ namespace WebApp.Controllers
             len = len / 1024 / 1024;
             return len > 1;
         }
+
+        private List<User> GetUserList(string path)
+        {
+            List<User> list = new List<Controllers.User>();
+            using (StreamReader reader = new StreamReader(path, Encoding.Default))
+            {
+                //循环读取所有行              
+                while (!reader.EndOfStream)
+                {
+                    //将每行数据，用-分割成3段        
+                    string[] data = reader.ReadLine().Replace("---", "/").Split('/');
+                    //新建一行，并将读出的数据分段，分别存入3个对应的列中        
+                    User user = new User();
+                    user.Ip = data[0];
+                    user.UserName = data[1];
+                    user.Type = data[2];
+                    //将这行数据加入到datatable中    
+                    list.Add(user);
+                }
+            }
+            return list;
+        }
+
+        public ActionResult SaveTxt(string strInfo)
+        {
+            string txtFile = AppDomain.CurrentDomain.BaseDirectory + "/test.txt";    
+            List<User> list = JsonConvert.DeserializeObject<List<User>>(strInfo);
+            //创建一个文件流，用以写入或者创建一个StreamWriter 
+            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.Flush();
+            // 使用StreamWriter来往文件中写入内容 
+            sw.BaseStream.Seek(0, SeekOrigin.Begin);
+            for (int i = 0; i < list.Count; i++)
+            {
+                sw.WriteLine(list[i].Ip+"/"+list[i].UserName+"/"+list[i].Type+"\r\n");
+            }           
+            //关闭此文件t 
+            sw.Flush();
+            sw.Close();
+            fs.Close();
+            return Json(true);
+        }
+
+    }
+
+    public class User
+    {
+        public string Ip { get; set; }
+        public string UserName { get; set; }
+        public string Type { get; set; }
     }
 }
