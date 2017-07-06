@@ -21,30 +21,30 @@
 </body>
 </html>
 <script>
-    function click(e) {
-        if (document.all) {
-            if (event.button == 2 || event.button == 3) {
-                document.oncontextmenu = 'return false';
-            }
-        }
-        if (document.layers) {
-            if (e.which == 3) {
-                document.oncontextmenu = 'return false';
-            }
-        }
-    }
-    if (document.layers) {
-        document.captureEvents(Event.MOUSEDOWN);
-    }
-    document.onmousedown = click;
-    document.oncontextmenu = new Function("return false;");
+    //function click(e) {
+    //    if (document.all) {
+    //        if (event.button == 2 || event.button == 3) {
+    //            document.oncontextmenu = 'return false';
+    //        }
+    //    }
+    //    if (document.layers) {
+    //        if (e.which == 3) {
+    //            document.oncontextmenu = 'return false';
+    //        }
+    //    }
+    //}
+    //if (document.layers) {
+    //    document.captureEvents(Event.MOUSEDOWN);
+    //}
+    //document.onmousedown = click;
+    //document.oncontextmenu = new Function("return false;");
 
-    document.onkeydown = document.onkeyup = document.onkeypress = function () {
-        if (window.event.keyCode == 123) {
-            window.event.returnValue = false;
-            return (false);
-        }
-    }
+    //document.onkeydown = document.onkeyup = document.onkeypress = function () {
+    //    if (window.event.keyCode == 123) {
+    //        window.event.returnValue = false;
+    //        return (false);
+    //    }
+    //}
     var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "../../";
     var GUID = WebUploader.Base.guid();//一个GUID
     $(function () {
@@ -66,6 +66,7 @@
 
             chunked: true,//开始分片上传
             chunkSize: 2048000,//每一片的大小
+            threads: 3,//上传并发数。
             formData: {
                 guid: GUID //自定义参数，待会儿解释
             },
@@ -100,9 +101,8 @@
 
         // 文件上传成功，给item添加成功class, 用样式标记上传成功。
         uploader.on('uploadSuccess', function (file, response) {
-            
             $('#' + file.id).find('p.state').text('已上传');
-            $.post('/Home/Merge', { guid: GUID, fileName: file.name }, function (data) {
+            $.post('Home/Merge', { guid: GUID, fileName: file.name }, function (data) {
                 $("#uploader .state").html("上传成功...");
               
             });
@@ -116,12 +116,13 @@
         // 完成上传完了，成功或者失败，先删除进度条。
         uploader.on('uploadComplete', function (file) {
             $('#' + file.id).find('.progress').fadeOut();
+           // window.location.href = "/Home/MediaIndex?fileName=" + escape(file.name);
         });
 
         //所有文件上传完毕
         uploader.on("uploadFinished", function () {
-            //提交表单
             window.location.href = "/Home/MediaIndex";
+            //提交表单
 
         });
         //开始上传
